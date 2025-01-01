@@ -1,4 +1,4 @@
-﻿absl-py==2.1.0
+absl-py==2.1.0
 altair==5.2.0
 annotated-types==0.6.0
 anyio==4.3.0
@@ -23,6 +23,7 @@ click==8.1.7
 colorama==0.4.6
 comm==0.2.2
 contourpy==1.2.1
+cryptography==44.0.0
 cycler==0.12.1
 debugpy==1.8.2
 decorator==5.1.1
@@ -48,7 +49,7 @@ GitPython==3.1.42
 google-pasta==0.2.0
 googleapis-common-protos==1.63.0
 grpcio==1.62.1
-gTTS==2.5.1 
+gTTS==2.5.1
 gunicorn==23.0.0
 h11==0.14.0
 h5py==3.10.0
@@ -140,6 +141,7 @@ pyee==11.1.0
 Pygments==2.17.2
 pyMeteor==0.0.5
 Pympler==1.0.1
+pyOpenSSL==24.3.0
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
 python-ddp==0.1.5
@@ -150,6 +152,7 @@ python-multipart==0.0.9
 python-slugify==8.0.4
 pytz==2024.1
 pytz-deprecation-shim==0.1.0.post0
+pywin32==306
 pywinpty==2.0.13
 PyYAML==6.0.1
 pyzmq==26.0.3
