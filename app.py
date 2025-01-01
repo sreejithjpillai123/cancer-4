@@ -5,6 +5,7 @@ import cv2
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
+import requests
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'  # Directory for saving uploads
@@ -14,13 +15,45 @@ app.secret_key = 'supersecretkey'
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
+# File URLs for external resources
+dataset_url = "https://github.com/<sreejithjpillai123>/<repo>/releases/download/v1.0/data.csv"
+numerical_model_url = "https://github.com/<sreejithjpillai123>/<repo>/releases/download/v1.0/breast_cancer_model.h5"
+classification_model_url = "https://github.com/<sreejithjpillai123>/<repo>/releases/download/v1.0/segmentation_model_classification.h5"
+segmentation_model_url = "https://github.com/<sreejithjpillai123>/<repo>/releases/download/v1.0/segmentation_model.h5"
+
+# Local paths for downloaded files
+os.makedirs("data", exist_ok=True)
+os.makedirs("models", exist_ok=True)
+dataset_path = "data/data.csv"
+numerical_model_path = "models/breast_cancer_model.h5"
+classification_model_path = "models/segmentation_model_classification.h5"
+segmentation_model_path = "models/segmentation_model.h5"
+
+def download_file(url, save_path):
+    """Download a file if it does not already exist."""
+    if not os.path.exists(save_path):
+        print(f"Downloading {save_path} from {url}...")
+        response = requests.get(url, stream=True)
+        response.raise_for_status()
+        with open(save_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+        print(f"Downloaded {save_path}")
+
+# Download necessary files
+download_file(dataset_url, dataset_path)
+download_file(numerical_model_url, numerical_model_path)
+download_file(classification_model_url, classification_model_path)
+download_file(segmentation_model_url, segmentation_model_path)
+
 # Load Models
-numerical_model = tf.keras.models.load_model("models/breast_cancer_model.h5")  # For numerical values
-image_classification_model = tf.keras.models.load_model("models/segmentation_model_classification.h5")  # For image classification
-segmentation_model = tf.keras.models.load_model("models/segmentation_model.h5")  # For segmentation
+numerical_model = tf.keras.models.load_model(numerical_model_path)  # For numerical values
+image_classification_model = tf.keras.models.load_model(classification_model_path)  # For image classification
+segmentation_model = tf.keras.models.load_model(segmentation_model_path)  # For segmentation
 
 # Load Dataset for Scaling Numerical Features
-data = pd.read_csv("data/data.csv")
+data = pd.read_csv(dataset_path)
 data_cleaned = data.drop(columns=['id', 'Unnamed: 32'])
 X = data_cleaned.drop(columns=['diagnosis'])
 scaler = StandardScaler()
